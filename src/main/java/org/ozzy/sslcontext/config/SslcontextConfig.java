@@ -53,7 +53,7 @@ public class SslcontextConfig {
                     ctx.init(null, new TrustManager[] { tm }, null);
                     LOG.info("Creating ssl beans for id "+e.getKey());
                     beanFactory.registerSingleton(e.getKey(), ctx);
-                    beanFactory.registerSingleton(e.getKey(), ctx.getSocketFactory());
+                    beanFactory.registerSingleton(e.getKey()+".factory", ctx.getSocketFactory());
                 }catch(Exception ex){
                     LOG.log(Level.SEVERE, "Error creating SSLContxt for context id "+e.getKey(),(Throwable)ex);
                     throw new RuntimeException("Unable to create SSLContext using supplied cert for context "+e.getKey(), ex);
