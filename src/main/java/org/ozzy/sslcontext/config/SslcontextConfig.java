@@ -2,6 +2,7 @@ package org.ozzy.sslcontext.config;
 
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
@@ -54,6 +55,7 @@ public class SslcontextConfig {
                     beanFactory.registerSingleton(e.getKey(), ctx);
                     beanFactory.registerSingleton(e.getKey(), ctx.getSocketFactory());
                 }catch(Exception ex){
+                    LOG.log(Level.SEVERE, "Error creating SSLContxt for context id "+e.getKey(),(Throwable)ex);
                     throw new RuntimeException("Unable to create SSLContext using supplied cert for context "+e.getKey(), ex);
                 }
             }
