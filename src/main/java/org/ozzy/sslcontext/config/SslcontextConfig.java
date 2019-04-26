@@ -1,7 +1,7 @@
 package org.ozzy.sslcontext.config;
 
-import java.security.GeneralSecurityException;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties("sslcontext")
 public class SslcontextConfig {
+
+    private static final Logger LOG = Logger.getLogger(SslcontextConfig.class.getName());
 
     private Map<String, SslConfig> contexts;
     private boolean enabled;
@@ -48,6 +50,7 @@ public class SslcontextConfig {
                     SSLContext ctx = SSLContext.getInstance("TLS");
                     Base64TrustingTrustManager tm = new Base64TrustingTrustManager(e.getValue().getTrustedCert());
                     ctx.init(null, new TrustManager[] { tm }, null);
+                    LOG.info("Creating ssl beans for id "+e.getKey());
                     beanFactory.registerSingleton(e.getKey(), ctx);
                     beanFactory.registerSingleton(e.getKey(), ctx.getSocketFactory());
                 }catch(Exception ex){
