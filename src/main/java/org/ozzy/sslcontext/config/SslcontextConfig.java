@@ -1,9 +1,13 @@
 package org.ozzy.sslcontext.config;
 
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 
+import org.ozzy.sslcontext.ssl.Base64TrustingTrustManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -40,7 +44,15 @@ public class SslcontextConfig {
         if(enabled && contexts!=null){
             for (Map.Entry<String, SslConfig> e : contexts.entrySet()) {
                 //Create ssl context from SslConfig, and publish as bean with name e.getKey()
-                beanFactory.registerSingleton(e.getKey(), e.getValue());
+                try{
+                    SSLContext ctx = SSLContext.getInstance("TLS");
+                    Base64TrustingTrustManager tm = new Base64TrustingTrustManager(e.getValue().getTrustedCert());
+                    ctx.init(null, new TrustManager[] { tm }, null);
+                    beanFactory.registerSingleton(e.getKey(), ctx);
+                    beanFactory.registerSingleton(e.getKey(), ctx.getSocketFactory());
+                }catch(Exception ex){
+                    throw new RuntimeException("Unable to create SSLContext using supplied cert for context "+e.getKey(), ex);
+                }
             }
         }else{
             if(enabled){

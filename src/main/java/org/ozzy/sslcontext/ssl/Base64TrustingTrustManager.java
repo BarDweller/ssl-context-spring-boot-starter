@@ -35,7 +35,7 @@ public class Base64TrustingTrustManager implements X509TrustManager {
     }
   }
 
-  Base64TrustingTrustManager(String cert) throws IOException, GeneralSecurityException {
+  public Base64TrustingTrustManager(String cert) throws IOException, GeneralSecurityException {
     ks = KeyStore.getInstance(KeyStore.getDefaultType());
     // Note: KeyStore requires it be loaded even if you don't load anything into it:
     ks.load(null);
