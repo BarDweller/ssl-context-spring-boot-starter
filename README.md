@@ -15,4 +15,4 @@ This project looks for configuration as follows:
 - sslcontext.contexts.{ctxid}.trustedcert - Base64 Encoded trust certificate, to be used for the context with id 'ctxid'.
 
 These properties could be set in application.properties with content from the environment (say via configmaps in k8s or similar).
-Or could be set via cfenv processors (when running in CF environements).
+Or could be set via cfenv processors (when running in CF environments).
