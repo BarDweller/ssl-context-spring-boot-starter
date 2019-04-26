@@ -9,11 +9,10 @@ app to configure any ssl context or ssl socket factory required.
 This project is an attempt to provide an extensible way for services to support trusted ssl connections
 via certificate information from application properties. 
 
-Initial support is prototyped for the Databases For MongoDB service in IBM Cloud. The eventual intent being
-that a java-cfenv processor would read the cert from the vcap_services entry, and make it available as the 
-appropriate property, causing this project to then tailor a custom MongoClientOptions bean to add the SSL 
-configuration. 
+This project looks for configuration as follows:
 
-Still very bit&pieces.. will make more sense as this project comes together. 
+- sslcontext.enabled - true/false, to enable or disable the effects of this starter.
+- sslcontext.contexts.{ctxid}.trustedcert - Base64 Encoded trust certificate, to be used for the context with id 'ctxid'.
 
-All basic concepts are proven and working, 
+These properties could be set in application.properties with content from the environment (say via configmaps in k8s or similar).
+Or could be set via cfenv processors (when running in CF environements).
